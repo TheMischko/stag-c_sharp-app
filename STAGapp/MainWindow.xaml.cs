@@ -1,4 +1,5 @@
-﻿using System;
+﻿using STAGapp.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,20 @@ namespace STAGapp
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private async void LoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            string username = "alexandr.broz";
+            string password = "izobaba9898";
+            try
+            {
+                string result = await LoginModel.LoginUserAsync(username, password);
+                System.Console.WriteLine(result);
+            } catch(LoginFailedException ex)
+            {
+                System.Console.WriteLine(ex.Message);
+            }
         }
     }
 }
