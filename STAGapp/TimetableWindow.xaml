@@ -1,12 +1,13 @@
-﻿<Window x:Class="STAGapp.MainWindow"
+﻿<Window x:Class="STAGapp.TimetableWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:STAGapp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="TimetableWindow" Height="450" Width="800" Loaded="Window_Loaded">
     <Grid>
-        <Button Content="Login" Width="75" Height="25" Click="LoginButton_Click" />
+        <TextBlock Text="Timetable" Margin="350,30,357,359"/>
+        <TextBlock Text="test" Margin="181,82,220,26" Name="Testblock"/>
     </Grid>
 </Window>
