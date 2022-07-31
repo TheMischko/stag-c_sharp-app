@@ -1,5 +1,4 @@
 ﻿using STAGapp.DataClasses;
-using STAGapp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,21 +16,23 @@ using System.Windows.Shapes;
 namespace STAGapp
 {
     /// <summary>
-    /// Interakční logika pro TimetableWindow.xaml
+    /// Interakční logika pro MainWindow.xaml
     /// </summary>
-    public partial class TimetableWindow : Window
+    public partial class MainWindow : Window
     {
-        private StagLoginTicket ticket;
-        public TimetableWindow(StagLoginTicket ticket)
+        public MainWindow()
         {
             InitializeComponent();
-            this.ticket = ticket;
         }
 
-        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        public void NavigateToTimetablePage(StagLoginTicket loginTicket)
         {
-            string timetable = await TimetableModel.GetTimetable(ticket.Token, ticket.StagUserInfo[0].OsCislo);
-            Testblock.Text = timetable;
+            Main.Content = new TimetablePage(loginTicket);
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            Main.Content = new LoginPage();
         }
     }
 }
