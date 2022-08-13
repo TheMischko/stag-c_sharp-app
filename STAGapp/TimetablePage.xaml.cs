@@ -26,13 +26,41 @@ namespace STAGapp
         public TimetablePage(StagLoginTicket ticket)
         {
             InitializeComponent();
+            InitializeTimeTableDataGrid();
             this.ticket = ticket;
+            
         }
 
-        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            string timetable = await TimetableModel.GetTimetable(ticket.Token, ticket.StagUserInfo[0].OsCislo);
-            Testblock.Text = timetable;
+            rozvrh timetable = await TimetableModel.GetTimetable(ticket.Token, ticket.StagUserInfo[0].OsCislo);
+            rozvrhovaAkce[,] eventsForCurrentWeek = TimetableModel.getStableTimetable(timetable);
+
+            TimeTableGrid.Items.Clear();
+            for (int i = 0; i < 5; i++)
+            {
+                rozvrhovaAkce[] row = new rozvrhovaAkce[Globals.timetableStartingHours.Length];
+                for (int j = 0; j < Globals.timetableStartingHours.Length; j++)
+                {
+                    row[j] = eventsForCurrentWeek[i, j];
+                }
+                
+                TimeTableGrid.Items.Add(row);
+            }
+        }
+
+        private void InitializeTimeTableDataGrid()
+        {
+            for (int i = 0; i < Globals.timetableStartingHours.Length; i++)
+            {
+                DataGridTextColumn column = new DataGridTextColumn();
+
+                column.Header = String.Format("{0} - {1}", Globals.timetableStartingHours[i], Globals.timetableEndingHours[i]);
+                column.Binding = new Binding(String.Format("[{0}].predmet", i));
+
+                TimeTableGrid.Columns.Add(column);
+            }
+                
         }
     }
 }

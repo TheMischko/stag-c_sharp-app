@@ -33,5 +33,6 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
+        <TextBox Width="200" Height="100" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="50" Text="alexandr.broz a heslo izobaba9898"/>
     </Grid>
 </Page>

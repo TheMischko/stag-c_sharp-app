@@ -6,10 +6,34 @@
       xmlns:local="clr-namespace:STAGapp"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="TimetablePage">
+      Title="TimetablePage" Loaded="Page_Loaded">
 
     <Grid>
-        <TextBlock Text="Timetable" Margin="350,30,357,359"/>
-        <TextBlock Text="test" Margin="181,82,220,26" Name="Testblock"/>
+        <TextBlock Text="Timetable" Margin="352,10,356,420"/>
+        <DataGrid x:Name="TimeTableGrid" 
+                  HorizontalAlignment="Left" 
+                  VerticalAlignment="Top" Width="700" Height="auto"
+                  Margin="54,35,0,0"
+                  AutoGenerateColumns="False">
+            <!-- Style of columbn headings-->
+            <DataGrid.Resources>
+                <Style TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="Background" Value="LightGray" />
+                    <Setter Property="FontWeight" Value="SemiBold" />
+                    <Setter Property="BorderThickness" Value="0,0,1,2" />
+                    <Setter Property="BorderBrush" Value="Black" />
+                    <Setter Property="Padding" Value="10,4,10,4" />
+                </Style>
+                <Style TargetType="{x:Type DataGridCell}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                <TextBlock Text="{Binding Path=predmet}"/>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.Resources>
+        </DataGrid>
     </Grid>
 </Page>
