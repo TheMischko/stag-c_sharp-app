@@ -24,7 +24,10 @@ namespace STAGapp
     {
         public LoginPage()
         {
-            InitializeComponent(); 
+            InitializeComponent();
+            #if DEBUG
+            CheatTextBox.Visibility = Visibility.Visible;
+            #endif
         }
 
         private async void LoginButton_Click(object sender, RoutedEventArgs e)

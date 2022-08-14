@@ -32,12 +32,12 @@ namespace STAGapp.Models
             string xmlContent = await response.Content.ReadAsStringAsync();
 
             System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(rozvrh));
-            rozvrh actions;
+            /*rozvrh actions;
             using (Stream reader = new FileStream("testData.xml", FileMode.Open))
             {
                 actions = (rozvrh)serializer.Deserialize(reader);
-            }
-            //StagTimetable actions = (StagTimetable)reader.Deserialize(GenerateStreamFromString(xmlContent));
+            }*/
+            rozvrh actions = (rozvrh)serializer.Deserialize(GenerateStreamFromString(xmlContent));
 
 
             return actions;
@@ -93,6 +93,37 @@ namespace STAGapp.Models
             }
             return Array.IndexOf(Globals.timetableStartingHours, differenceString);
 
+        }
+        private static int getEndingHourIndex(string inputHour)
+        {
+            string[] inputHourParts = inputHour.Split(':');
+            TimeSpan inputHoursTimeSpan = new TimeSpan(int.Parse(inputHourParts[0]), int.Parse(inputHourParts[1]), 0);
+
+            double lowestDifference = double.MaxValue;
+            string differenceString = "";
+
+            for (int i = 0; i < Globals.timetableEndingHours.Length; i++)
+            {
+                string[] startingHourParts = Globals.timetableEndingHours[i].Split(':');
+                TimeSpan startingHoursTimeSpan = new TimeSpan(int.Parse(startingHourParts[0]), int.Parse(startingHourParts[1]), 0);
+
+                double timeDifference = Math.Abs(inputHoursTimeSpan.Subtract(startingHoursTimeSpan).TotalMilliseconds);
+                if (timeDifference < lowestDifference)
+                {
+                    lowestDifference = timeDifference;
+                    differenceString = Globals.timetableEndingHours[i];
+                }
+            }
+            return Array.IndexOf(Globals.timetableEndingHours, differenceString);
+
+        }
+
+        public static int getTimetableHourSpan(string startingHour, string endingHour)
+        {
+            int startingIndex = getStartingHourIndex(startingHour);
+            int endingindex = getEndingHourIndex(endingHour);
+
+            return endingindex - startingIndex + 1;
         }
     }
 }

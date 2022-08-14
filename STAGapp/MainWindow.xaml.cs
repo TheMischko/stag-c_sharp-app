@@ -30,6 +30,11 @@ namespace STAGapp
             Main.Content = new TimetablePage(loginTicket);
         }
 
+        public void NavigateToLectureRecordingsPage(rozvrhovaAkce timetableEvent, TimetablePage timetablePage)
+        {
+            Main.Content = new LectureRecordingsPage(timetableEvent, timetablePage);
+        }
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Main.Content = new LoginPage();

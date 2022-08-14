@@ -940,6 +940,14 @@ namespace STAGapp
                 this.podilNaVyuceFieldSpecified = value;
             }
         }
+
+        public override string ToString()
+        {
+            if(this.titulZa.Length > 0)
+                return String.Format("{0} {1} {2}, {3}", this.titulPred, this.jmeno, this.prijmeni, this.titulZa);
+            else
+                return String.Format("{0} {1} {2}", this.titulPred, this.jmeno, this.prijmeni);
+        }
     }
 }
 

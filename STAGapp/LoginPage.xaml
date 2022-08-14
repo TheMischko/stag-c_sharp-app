@@ -6,33 +6,75 @@
       xmlns:local="clr-namespace:STAGapp"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="LoginPage">
+      Title="LoginPage"
+      Background="White"
+      FontSize="16">
 
     <Grid>
-        <TextBlock Height="23" HorizontalAlignment="Left" Margin="10,10,0,0" 
-                   Name="LoginHeading" Text="Přihlášení" VerticalAlignment="Top" 
-                   FontSize="17" FontStretch="ExtraCondensed"/>
-        <TextBlock Height="23" HorizontalAlignment="Left" Margin="10,115,0,0" 
-                   Name="usernameTextBlock" Text="Uživatelské jméno" VerticalAlignment="Top" Width="101" />
-        <TextBlock Height="23" HorizontalAlignment="Left" Margin="10,168,0,0" 
-                   Name="passwordTextBlock" Text="Heslo" VerticalAlignment="Top" Width="77" />
-        <TextBox Height="23" HorizontalAlignment="Left" Margin="131,115,0,0" 
-                 Name="usernameTextBox" VerticalAlignment="Top" Width="247" />
-        <PasswordBox Height="23" HorizontalAlignment="Left" Margin="131,168,0,0" 
-                     Name="passwordTextBox" VerticalAlignment="Top" Width="247" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="20"/>
+        </Grid.ColumnDefinitions>
+        
+        <TextBlock HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" 
+                       Name="LoginHeading" Text="Přihlášení" VerticalAlignment="Top" 
+                       FontSize="24" FontStretch="ExtraCondensed"/>
+        <TextBlock HorizontalAlignment="Left" Grid.Column="1" Grid.Row="1" 
+                       Text="Použijte stejné přihlašovací údaje jako pro IS/STAG." VerticalAlignment="Center" 
+                       FontSize="18" FontStretch="ExtraCondensed"/>
+        
+        <Grid Grid.Row="2" Grid.Column="1" Width="600">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="200"/>
+            </Grid.ColumnDefinitions>
 
-        <Button Content="Přihlásit se" Height="23" HorizontalAlignment="Left" Margin="131,229,0,0" 
-                Name="loginButton" VerticalAlignment="Top" Width="104" Click="LoginButton_Click" />
-        <TextBlock HorizontalAlignment="Left" Margin="34,257,0,0" Name="ErrorTextBlock"
-                   VerticalAlignment="Top" Width="331" Text="Error" Height="52" Visibility="Hidden">
-            <TextBlock.Style>
-                <Style TargetType="TextBlock">
-                    <Setter Property="Background" Value="Red" />
-                    <Setter Property="Padding" Value="2" />
-                    <Setter Property="Foreground" Value="White" />
-                </Style>
-            </TextBlock.Style>
-        </TextBlock>
-        <TextBox Width="200" Height="100" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="50" Text="alexandr.broz a heslo izobaba9898"/>
+            <TextBlock Name="usernameTextBlock" Text="Uživatelské jméno" Height="25"
+                       Grid.Column="0" Grid.Row="0" />
+            <TextBox Name="usernameTextBox" Height="25"
+                     Grid.Column="1" Grid.Row="0"/>
+
+            <TextBlock Name="passwordTextBlock" Text="Heslo" Height="25"
+                       Grid.Column="0" Grid.Row="1" />
+            <PasswordBox Name="passwordTextBox" Height="25"
+                         Grid.Column="1" Grid.Row="1"/>
+
+            <TextBlock Name="ErrorTextBlock" Text="Error" Visibility="Visible"
+                       Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Background" Value="Red" />
+                        <Setter Property="Padding" Value="2" />
+                        <Setter Property="Foreground" Value="White" />
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+
+            <Button Content="Přihlásit se" Name="loginButton" Height="25" Click="LoginButton_Click" Grid.Column="1" Grid.Row="3"/>
+
+
+            <TextBox Grid.Column="2" Grid.Row="3"
+                     Height="50" 
+                     VerticalAlignment="Bottom" HorizontalAlignment="Right" 
+                     Text="alexandr.broz izobaba9898"
+                     TextWrapping="Wrap"
+                     Margin="5,5,0,0"
+                     x:Name="CheatTextBox"
+                     Visibility="Hidden"/>
+        </Grid>
     </Grid>
 </Page>

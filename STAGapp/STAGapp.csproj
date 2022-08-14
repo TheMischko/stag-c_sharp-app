@@ -128,9 +128,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\TimeTableCell.xaml.cs">
+      <DependentUpon>TimeTableCell.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DataClasses\StagPlannedAction.cs" />
     <Compile Include="DataClasses\StagTeacher.cs" />
     <Compile Include="DataClasses\StagTimetable.cs" />
+    <Compile Include="LectureRecordingsPage.xaml.cs">
+      <DependentUpon>LectureRecordingsPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
@@ -142,6 +148,14 @@
     <Compile Include="TimetablePage.xaml.cs">
       <DependentUpon>TimetablePage.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\TimeTableCell.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LectureRecordingsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="LoginPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
