@@ -12,7 +12,7 @@ namespace STAGapp.Models
 {
     public static class TimetableModel
     {
-        public static async Task<rozvrh> GetTimetable(string userToken, string personalNum)
+        public static async Task<rozvrh> GetTimetable(string userToken, string personalNum, string year, string semestr, Roles role = Roles.Student)
         {
             HttpClient http = Globals.httpClient;
             http.DefaultRequestHeaders.Clear();
@@ -20,7 +20,20 @@ namespace STAGapp.Models
             string tokenEncoded = System.Convert.ToBase64String(tokenEncodedBytes);
             http.DefaultRequestHeaders.Add("Authorization", String.Format("Basic {0}", tokenEncoded));
 
-            HttpResponseMessage response = await http.GetAsync(String.Format("{0}/services/rest2/rozvrhy/getRozvrhByStudent?osCislo={1}", Globals.webServiceURL, personalNum));
+            HttpResponseMessage response;
+
+            // Get teachers timetable
+            if (role == Roles.Teacher)
+            {
+                response = await http.GetAsync(String.Format("{0}/services/rest2/rozvrhy/getRozvrhByUcitel?ucitIdno={1}&rok={2}&semestr={3}&jenRozvrhoveAkce=true", 
+                    Globals.webServiceURL, personalNum, year, semestr));
+            }
+            // Get students timetable
+            else
+            {
+                response = await http.GetAsync(String.Format("{0}/services/rest2/rozvrhy/getRozvrhByStudent?osCislo={1}&rok={2}&semestr={3}&jenRozvrhoveAkce=true",
+                    Globals.webServiceURL, personalNum, year, semestr));
+            }
 
             if(response.StatusCode != System.Net.HttpStatusCode.OK)
             {
@@ -37,10 +50,16 @@ namespace STAGapp.Models
             {
                 actions = (rozvrh)serializer.Deserialize(reader);
             }*/
-            rozvrh actions = (rozvrh)serializer.Deserialize(GenerateStreamFromString(xmlContent));
-
-
-            return actions;
+            try
+            {
+                rozvrh actions = (rozvrh)serializer.Deserialize(GenerateStreamFromString(xmlContent));
+                return actions;
+            } catch( Exception ex)
+            {
+                System.Console.WriteLine(ex.Message);
+                return default;
+            }
+            
         }
 
         private static Stream GenerateStreamFromString(string s)
@@ -57,6 +76,8 @@ namespace STAGapp.Models
         public static rozvrhovaAkce[,] getStableTimetable(rozvrh timeTable)
         {
             rozvrhovaAkce[,] eventsByDates = new rozvrhovaAkce[5, Globals.timetableStartingHours.Length];
+
+            if (timeTable == null) return eventsByDates;
 
             foreach (rozvrhovaAkce timetableEvent in timeTable.rozvrhovaAkce)
             {

@@ -24,19 +24,40 @@ namespace STAGapp
     public partial class TimetablePage : Page
     {
         private StagLoginTicket ticket;
+        private string selectedYear = "";
+        private string selectedSemestr = "";
+        private List<TimeTableCell> cells;
         public TimetablePage(StagLoginTicket ticket)
         {
             InitializeComponent();
             InitializeTimeTableDataGrid();
             this.ticket = ticket;
-            
+            this.cells = new List<TimeTableCell>();
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            rozvrh timetable = await TimetableModel.GetTimetable(ticket.Token, ticket.StagUserInfo[0].OsCislo);
+            DateTime now = DateTime.Now;
+            selectedYear = now.Month >= 9 ? now.Year.ToString() : (now.Year - 1).ToString();
+            selectedSemestr = now.Month >= 9 ? "zs" : "ls";
+
+            LoadNewCalendar();
+        }
+
+        private async void LoadNewCalendar()
+        {
+            string authToken = UserModel.GetAuthToken();
+            bool isTeacher = UserModel.IsUserInRole(Roles.Teacher);
+            string userID = UserModel.GetIDByRole(isTeacher ? Roles.Teacher : Roles.Student);
+
+            rozvrh timetable = await TimetableModel.GetTimetable(authToken, userID, selectedYear, selectedSemestr, isTeacher ? Roles.Teacher : Roles.Student);
             rozvrhovaAkce[,] eventsForCurrentWeek = TimetableModel.getStableTimetable(timetable);
-            
+
+            foreach(TimeTableCell cell in cells)
+            {
+                TimetableGrid.Children.Remove(cell);
+            }
+
             for (int i = 0; i < Globals.workdayStrings.Length; i++)
             {
                 for (int j = 0; j < Globals.timetableStartingHours.Length; j++)
@@ -48,8 +69,9 @@ namespace STAGapp
                     timeTableCell.TimetableEvent = eventsForCurrentWeek[i, j];
                     timeTableCell.MouseClickHandlerFunc = EventCellClickHandler;
                     j += colSpan - 1;
+                    cells.Add(timeTableCell);
                     TimetableGrid.Children.Add(timeTableCell);
-                }   
+                }
             }
         }
 
@@ -62,6 +84,7 @@ namespace STAGapp
 
         private void InitializeTimeTableDataGrid()
         {
+            TimetableGrid.Children.Clear();
             // Add margin column
             ColumnDefinition columnDefinition = new ColumnDefinition();
             columnDefinition.Width = new GridLength(10);
@@ -171,6 +194,20 @@ namespace STAGapp
                     TimetableGrid.Children.Add(emptyCell);
                 }
             }
+        }
+
+        private void YearComboBox_ValueChanged(object sender, EventArgs e)
+        {
+            ComboBoxItem yearComboBox = (ComboBoxItem)((ComboBox)sender).SelectedItem;
+            selectedYear = (string)yearComboBox.Tag;
+            LoadNewCalendar();
+        }
+
+        private void SemestrComboBox_ValueChanged(object sender, EventArgs e)
+        {
+            ComboBoxItem semestrComboBox = (ComboBoxItem)((ComboBox)sender).SelectedItem;
+            selectedSemestr = (string)semestrComboBox.Tag;
+            LoadNewCalendar();
         }
     }
 }

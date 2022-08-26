@@ -64,6 +64,7 @@
       <HintPath>..\packages\System.Buffers.4.5.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.IO, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IO.4.3.0\lib\net462\System.IO.dll</HintPath>
@@ -134,29 +135,31 @@
     <Compile Include="DataClasses\StagPlannedAction.cs" />
     <Compile Include="DataClasses\StagTeacher.cs" />
     <Compile Include="DataClasses\StagTimetable.cs" />
-    <Compile Include="LectureRecordingsPage.xaml.cs">
+    <Compile Include="Pages\LectureRecordingsPage.xaml.cs">
       <DependentUpon>LectureRecordingsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="LoginPage.xaml.cs">
+    <Compile Include="Pages\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\FTPModel.cs" />
     <Compile Include="Models\TimetableModel.cs" />
     <Compile Include="DataClasses\Rozvrh.cs" />
-    <Compile Include="TimetablePage.xaml.cs">
+    <Compile Include="Models\UserModel.cs" />
+    <Compile Include="Pages\TimetablePage.xaml.cs">
       <DependentUpon>TimetablePage.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\TimeTableCell.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="LectureRecordingsPage.xaml">
+    <Page Include="Pages\LectureRecordingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="LoginPage.xaml">
+    <Page Include="Pages\LoginPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -171,7 +174,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TimetablePage.xaml">
+    <Page Include="Pages\TimetablePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -221,5 +224,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Resource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

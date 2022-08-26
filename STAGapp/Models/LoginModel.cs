@@ -55,6 +55,11 @@ namespace STAGapp.Models
 
             return ticket;
         }
+
+        public static void LoginMediasiteAsync(string username, string password)
+        {
+
+        }
     }
 
     public class LoginFailedException : Exception

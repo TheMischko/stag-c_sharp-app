@@ -53,7 +53,7 @@
             <PasswordBox Name="passwordTextBox" Height="25"
                          Grid.Column="1" Grid.Row="1"/>
 
-            <TextBlock Name="ErrorTextBlock" Text="Error" Visibility="Visible"
+            <TextBlock Name="ErrorTextBlock" Text="Error" Visibility="Hidden"
                        Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2">
                 <TextBlock.Style>
                     <Style TargetType="TextBlock">

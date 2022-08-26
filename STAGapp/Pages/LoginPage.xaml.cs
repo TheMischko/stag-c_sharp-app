@@ -51,6 +51,7 @@ namespace STAGapp
             {
                 // Successful log-in
                 StagLoginTicket result = await LoginModel.LoginUserAsync(username, password);
+                UserModel.SetUser(result);
                 MainWindow window = (MainWindow)Window.GetWindow(this);
                 window.NavigateToTimetablePage(result);
                 System.Console.WriteLine(result);

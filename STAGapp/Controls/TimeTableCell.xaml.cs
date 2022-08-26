@@ -94,7 +94,19 @@ namespace STAGapp.Controls
         {
             this.TimeText = String.Format("{0} - {1}", rozvrhovaAkce.hodinaSkutOd, rozvrhovaAkce.hodinaSkutDo);
             this.SubjectText = rozvrhovaAkce.katedra.Length > 0 ? String.Format("{0}/{1}", rozvrhovaAkce.katedra, rozvrhovaAkce.predmet) : rozvrhovaAkce.predmet;
-            this.LectorText = rozvrhovaAkce.ucitel.ToString();
+            if (!UserModel.IsUserInRole(Roles.Teacher))
+            {
+                if (rozvrhovaAkce.ucitel != null)
+                {
+                    this.LectorText = rozvrhovaAkce.ucitel.ToString();
+                } else
+                {
+                    this.LectorText = "";
+                }
+            } else
+            {
+                this.LectorText = "";
+            }
 
             Grid.SetColumn(this, columnStartIndex);
             Grid.SetRow(this, rowIndex);

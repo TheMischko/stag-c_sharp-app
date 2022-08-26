@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:STAGapp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="720" Width="1480"
+        Title="STAG Sledování přednášek" Height="720" Width="1480"
         Loaded="Window_Loaded">
     <Grid>
         <StackPanel Orientation="Horizontal" Height="35" VerticalAlignment="Top">
