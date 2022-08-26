@@ -30,7 +30,7 @@ namespace STAGapp.Models
             http.DefaultRequestHeaders.Clear();
             http.DefaultRequestHeaders.Add("Authorization", String.Format("Basic {0}", credentialsEncoded));
 
-            HttpResponseMessage response = await http.GetAsync("https://stag-ws.tul.cz/ws/login?originalURL=https%3A%2F%2Fwww.google.com&basic=1");
+            HttpResponseMessage response = await http.GetAsync(String.Format("{0}/login?originalURL=https%3A%2F%2Fwww.google.com&basic=1", Globals.webServiceURL));
 
             if(response.StatusCode != System.Net.HttpStatusCode.OK)
             {

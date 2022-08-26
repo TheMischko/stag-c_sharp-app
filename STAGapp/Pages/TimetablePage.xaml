@@ -8,7 +8,12 @@
       d:DesignHeight="720" d:DesignWidth="1280"
       Title="TimetablePage" Loaded="Page_Loaded"
       Background="White">
-
+    <Page.Resources>
+        <Style x:Key="MediasiteOfflineText" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="Brown"/>
+        </Style>
+    </Page.Resources>
+    <!-- Page grid -->
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
@@ -25,9 +30,38 @@
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="2*" />
             </Grid.ColumnDefinitions>
+            
+            <!-- Mediasite status -->
+            <Grid Margin="0, 10" x:Name="MediasiteStatusGrid">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="18"/>
+                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="110" />
+                    <ColumnDefinition Width="85" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="1" Text="●" Style="{StaticResource MediasiteOfflineText}" FontSize="18"></TextBlock>
+                <TextBlock Grid.Column="2" Text="Mediasite" Style="{StaticResource MediasiteOfflineText}" FontSize="18"></TextBlock>
+                <TextBlock Grid.Column="3" Text="nepřihlášeno." Style="{StaticResource MediasiteOfflineText}" FontSize="18"></TextBlock>
+                <TextBlock Grid.Column="4" Text="Přihlásit" x:Name="MediasiteLoginTextBlock" MouseUp="MediasiteLoginTextBlock_OnMouseUp">
+                    <TextBlock.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontSize" Value="18"></Setter>
+                            <Setter Property="TextDecorations" Value="Underline" />
+                            <Setter Property="Foreground" Value="Blue" />
+                            <Setter Property="Cursor" Value="Hand"></Setter>
+                        </Style>
+                    </TextBlock.Resources>
+                </TextBlock>
+            </Grid>
+            
+            <!-- Page title -->
             <TextBlock Text="Pravidelný rozvrh" Grid.Row="0" Grid.Column="1"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" FontSize="24" FontWeight="Bold"/>
+            
+            <!-- Selection of year and semester -->
             <Grid Grid.Row="0" Grid.Column="2" Margin="5,10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*" />

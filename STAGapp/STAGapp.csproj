@@ -135,6 +135,10 @@
     <Compile Include="DataClasses\StagPlannedAction.cs" />
     <Compile Include="DataClasses\StagTeacher.cs" />
     <Compile Include="DataClasses\StagTimetable.cs" />
+    <Compile Include="MediasiteLoginWindow.xaml.cs">
+      <DependentUpon>MediasiteLoginWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MediaSiteModel.cs" />
     <Compile Include="Pages\LectureRecordingsPage.xaml.cs">
       <DependentUpon>LectureRecordingsPage.xaml</DependentUpon>
     </Compile>
@@ -155,6 +159,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MediasiteLoginWindow.xaml" />
     <Page Include="Pages\LectureRecordingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

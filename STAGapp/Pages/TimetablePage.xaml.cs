@@ -3,6 +3,7 @@ using STAGapp.DataClasses;
 using STAGapp.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -41,6 +42,11 @@ namespace STAGapp
             selectedYear = now.Month >= 9 ? now.Year.ToString() : (now.Year - 1).ToString();
             selectedSemestr = now.Month >= 9 ? "zs" : "ls";
 
+            //TODO: If student then hide
+            if (false) {
+                MediasiteStatusGrid.Visibility = Visibility.Hidden;
+            }
+            
             LoadNewCalendar();
         }
 
@@ -208,6 +214,18 @@ namespace STAGapp
             ComboBoxItem semestrComboBox = (ComboBoxItem)((ComboBox)sender).SelectedItem;
             selectedSemestr = (string)semestrComboBox.Tag;
             LoadNewCalendar();
+        }
+
+        void MediasiteLoginTextBlock_OnMouseUp(object sender, MouseButtonEventArgs e) {
+            MediasiteLoginWindow msLoginWindow = new MediasiteLoginWindow();
+            msLoginWindow.Closing += MediasiteLoginWindow_Closing;
+            msLoginWindow.Show();
+        }
+
+        private void MediasiteLoginWindow_Closing(object sender, CancelEventArgs e) {
+            MediasiteLoginWindow msLoginWindow = (MediasiteLoginWindow) sender;
+            string msLogin = msLoginWindow.login;
+            string msPassword = msLoginWindow.password;
         }
     }
 }
