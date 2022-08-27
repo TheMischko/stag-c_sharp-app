@@ -39,7 +39,7 @@ namespace STAGapp.Models
         {
             HttpClient http = CreateRequest();
             authentication.AddAuthentication(http);
-            HttpResponseMessage response = await http.GetAsync(String.Format("{0}/Presentations", Globals.mediasiteAPIUrl));
+            HttpResponseMessage response = await http.GetAsync(String.Format("{0}/Presentations", API_host));
             return response.StatusCode != HttpStatusCode.Unauthorized && response.StatusCode != HttpStatusCode.Forbidden;
         }
         

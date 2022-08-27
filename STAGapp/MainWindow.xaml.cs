@@ -13,6 +13,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using STAGapp.Pages;
+using ToastNotifications;
+using ToastNotifications.Lifetime;
+using ToastNotifications.Messages;
+using ToastNotifications.Position;
 
 namespace STAGapp
 {
@@ -25,6 +29,22 @@ namespace STAGapp
         {
             InitializeComponent();
         }
+
+        public Notifier Notifier => new Notifier(config => {
+            config.PositionProvider = new WindowPositionProvider(
+                parentWindow: this,
+                corner: Corner.BottomCenter,
+                offsetX: 0,
+                offsetY: 10
+            );
+
+            config.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
+                notificationLifetime: TimeSpan.FromSeconds(3),
+                maximumNotificationCount: MaximumNotificationCount.FromCount(5)
+            );
+
+            config.Dispatcher = Application.Current.Dispatcher;
+        });
 
         public void NavigateToTimetablePage(StagLoginTicket loginTicket)
         {

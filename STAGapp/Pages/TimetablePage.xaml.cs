@@ -217,15 +217,20 @@ namespace STAGapp
         }
 
         void MediasiteLoginTextBlock_OnMouseUp(object sender, MouseButtonEventArgs e) {
-            MediasiteLoginWindow msLoginWindow = new MediasiteLoginWindow();
+            MainWindow window = (MainWindow)Window.GetWindow(this);
+            MediasiteLoginWindow msLoginWindow = new MediasiteLoginWindow(window);
             msLoginWindow.Closing += MediasiteLoginWindow_Closing;
             msLoginWindow.Show();
         }
 
         private void MediasiteLoginWindow_Closing(object sender, CancelEventArgs e) {
             MediasiteLoginWindow msLoginWindow = (MediasiteLoginWindow) sender;
-            string msLogin = msLoginWindow.login;
-            string msPassword = msLoginWindow.password;
+            
+            if (Globals.MediasiteAuth != null) {
+                MediasiteLoginTextBlock.Visibility = Visibility.Hidden;
+                this.Resources["MediasiteStatusTextColor"] = Brushes.Green;
+                MediasiteLoginStatusText.Text = "přihlášeno.";
+            }
         }
     }
 }

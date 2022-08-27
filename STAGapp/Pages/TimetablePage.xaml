@@ -3,14 +3,16 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:sys="clr-namespace:System;assembly=mscorlib"
       xmlns:local="clr-namespace:STAGapp" xmlns:control="clr-namespace:STAGapp.Controls"
       mc:Ignorable="d" 
       d:DesignHeight="720" d:DesignWidth="1280"
       Title="TimetablePage" Loaded="Page_Loaded"
       Background="White">
     <Page.Resources>
+        <SolidColorBrush x:Key="MediasiteStatusTextColor">Brown</SolidColorBrush>
         <Style x:Key="MediasiteOfflineText" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="Brown"/>
+            <Setter Property="Foreground" Value="{DynamicResource MediasiteStatusTextColor}"/>
         </Style>
     </Page.Resources>
     <!-- Page grid -->
@@ -43,7 +45,7 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="1" Text="●" Style="{StaticResource MediasiteOfflineText}" FontSize="18"></TextBlock>
                 <TextBlock Grid.Column="2" Text="Mediasite" Style="{StaticResource MediasiteOfflineText}" FontSize="18"></TextBlock>
-                <TextBlock Grid.Column="3" Text="nepřihlášeno." Style="{StaticResource MediasiteOfflineText}" FontSize="18"></TextBlock>
+                <TextBlock x:Name="MediasiteLoginStatusText" Grid.Column="3" Text="nepřihlášeno." Style="{StaticResource MediasiteOfflineText}" FontSize="18"></TextBlock>
                 <TextBlock Grid.Column="4" Text="Přihlásit" x:Name="MediasiteLoginTextBlock" MouseUp="MediasiteLoginTextBlock_OnMouseUp">
                     <TextBlock.Resources>
                         <Style TargetType="TextBlock">

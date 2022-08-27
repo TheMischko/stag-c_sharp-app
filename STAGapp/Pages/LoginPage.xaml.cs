@@ -14,37 +14,41 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ToastNotifications.Messages;
 
 namespace STAGapp
 {
     /// <summary>
     /// Interakční logika pro LoginPage.xaml
     /// </summary>
-    public partial class LoginPage : Page
-    {
+    public partial class LoginPage : Page {
         public LoginPage()
         {
             InitializeComponent();
-            #if DEBUG
+#if DEBUG
             CheatTextBox.Visibility = Visibility.Visible;
             #endif
         }
 
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            ErrorTextBlock.Visibility = Visibility.Hidden;
-            //string username = "alexandr.broz";
-            //string password = "izobaba9898";
+            Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
+            
             string username = usernameTextBox.Text;
+            MainWindow window = (MainWindow)Window.GetWindow(this);
+            
+            ErrorTextBlock.Visibility = Visibility.Hidden;
             if (username.Length == 0)
             {
-                ShowError("Neplatné uživatelské jméno.");
+                window.Notifier.ShowError("Neplatné uživatelské jméno.");
+                Mouse.OverrideCursor = null;
                 return;
             }
             string password = passwordTextBox.Password;
             if (password.Length == 0)
             {
-                ShowError("Neplatné heslo.");
+                window.Notifier.ShowError("Neplatné heslo.");
+                Mouse.OverrideCursor = null;
                 return;
             }
             try
@@ -52,16 +56,17 @@ namespace STAGapp
                 // Successful log-in
                 StagLoginTicket result = await LoginModel.LoginUserAsync(username, password);
                 UserModel.SetUser(result);
-                MainWindow window = (MainWindow)Window.GetWindow(this);
                 window.NavigateToTimetablePage(result);
-                System.Console.WriteLine(result);
+                window.Notifier.ShowSuccess("Přihlášení bylo úspěšné.");
+                Mouse.OverrideCursor = null;
             }
             catch (LoginFailedException ex)
             {
-                System.Console.WriteLine(ex.Message);
-                ShowError("Neplatné přihlašovací údaje.");
+                window.Notifier.ShowError("Neplatné přihlašovací údaje.");
+                Mouse.OverrideCursor = null;
                 return;
             }
+            Mouse.OverrideCursor = null;
         }
 
         private void ShowError(string message)
