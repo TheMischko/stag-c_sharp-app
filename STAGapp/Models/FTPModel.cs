@@ -201,10 +201,9 @@ namespace FTPClient
 
             DownloadCompleted?.Invoke(null, EventArgs.Empty);
         }
-
-        public class FileTransferingArgs : EventArgs
-        {
-            public double Percentage { get; set; }
-        }
+    }
+    public class FileTransferingArgs : EventArgs
+    {
+        public double Percentage { get; set; }
     }
 }

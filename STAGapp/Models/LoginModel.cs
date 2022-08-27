@@ -52,6 +52,7 @@ namespace STAGapp.Models
             string userInfoJSON = System.Text.Encoding.UTF8.GetString(base64UserInfo);
             StagLoginTicket ticket = JsonConvert.DeserializeObject<StagLoginTicket>(userInfoJSON);
             ticket.Token = userData["stagUserTicket"];
+            ticket.Username = username;
 
             return ticket;
         }

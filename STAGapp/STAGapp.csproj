@@ -183,9 +183,13 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\UploadPresentationPage.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Pages\UploadPresentationPage.xaml.cs">
+      <DependentUpon>UploadPresentationPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

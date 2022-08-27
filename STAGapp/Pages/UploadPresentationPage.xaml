@@ -1,0 +1,92 @@
+﻿<Page x:Class="STAGapp.Pages.UploadPresentationPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:STAGapp.Pages"
+      mc:Ignorable="d"
+      d:DesignHeight="720" d:DesignWidth="1280"
+      Title="UploadPresentationPage"
+      Loaded="UploadPresentationPage_OnLoaded">
+    <Page.Resources>
+        <Style TargetType="TextBlock" x:Key="FormTitleTextblock">
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Width" Value="200" />
+        </Style>
+        <Style TargetType="Control" x:Key="FormControl">
+            <Setter Property="Width" Value="400"></Setter>
+            <Setter Property="Margin" Value="0,2"></Setter>
+            <Setter Property="FontSize" Value="18" />
+        </Style>
+        <Style TargetType="StackPanel" x:Key="FormControlWrapper">
+            <Setter Property="Width" Value="400"></Setter>
+            <Setter Property="Margin" Value="0,2"></Setter>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style TargetType="RadioButton">
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Height" Value="36"></Setter>
+        </Style>
+    </Page.Resources>
+    <Grid Margin="10">
+        <StackPanel Margin="100, 0" HorizontalAlignment="Center">
+            <TextBlock x:Name="TitleTextBlock" Text="Nahrát novou přednášku k předmětu ?"
+                       TextAlignment="Center" Margin="0, 0, 0, 50" FontWeight="Bold" FontSize="28"/>
+            <StackPanel Orientation="Horizontal" Margin="0, 10" Height="40">
+                <TextBlock Text="Soubor se záznamem:" Style="{StaticResource FormTitleTextblock}"/>
+                <Button x:Name="FileSelectDialogButton" Content="Vyberte soubor se záznamem přednášky..."
+                        FontSize="18" Padding="4" Click="FileSelectDialogButton_OnClick" MaxWidth="500"
+                        Style="{StaticResource FormControl}">
+                    <Button.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border BorderBrush="Gray" BorderThickness="2" Padding="5" Background="LightGray"
+                                                Cursor="Hand" Width="400" Height="Auto">
+                                            <TextBlock Text="{TemplateBinding Content}" 
+                                                       TextWrapping="Wrap" Width="400" Height="Auto" />
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0, 10" Height="40">
+                <TextBlock Text="Název přednášky:" Style="{StaticResource FormTitleTextblock}"/>
+                <TextBox x:Name="PresentationTitleTextBox" Style="{StaticResource FormControl}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0, 10" Height="Auto">
+                <TextBlock Text="Popis přednášky:" Style="{StaticResource FormTitleTextblock}" 
+                           VerticalAlignment="Top" Margin="0,6,0,0"/>
+                <TextBox x:Name="PresentationDescriptionTextBox" Style="{StaticResource FormControl}" Height="80"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0, 10" Height="40">
+                <TextBlock Text="Datum konání:" Style="{StaticResource FormTitleTextblock}"/>
+                <DatePicker x:Name="PresentationDatePicker" Style="{StaticResource FormControl}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0, 10" Height="Auto">
+                <TextBlock Text="Typ přenosu:" Style="{StaticResource FormTitleTextblock}"
+                           VerticalAlignment="Top" Margin="0,0,0,0"/>
+                <StackPanel Style="{StaticResource FormControlWrapper}" Height="80">
+                    <RadioButton x:Name="FtpRadioButton" IsChecked="True" GroupName="transmission">FTP</RadioButton>
+                    <RadioButton x:Name="HttpRadioButton" GroupName="transmission">HTTP</RadioButton>
+                </StackPanel>
+            </StackPanel>
+            <Button x:Name="UploadButton" Content="Nahrát" Style="{StaticResource FormControl}" 
+                    Click="UploadButton_OnClick"/>
+            <ProgressBar x:Name="UploadProgressBar" Style="{StaticResource FormControl}" Height="14" 
+                         Visibility="Hidden" Margin="0,14,0,0"/>
+            <TextBlock x:Name="UploadProgressBarText" Text="0%" TextAlignment="Center" FontSize="18" Visibility="Hidden"/>
+            <Button x:Name="BackButton" Content="Zpět na detail předmětu" Style="{StaticResource FormControl}" 
+                    Click="UploadButton_OnClick" Margin="0, 32" Visibility="Hidden"/>
+        </StackPanel>
+    </Grid>
+</Page>

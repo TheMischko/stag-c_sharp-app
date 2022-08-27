@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using STAGapp.Pages;
 
 namespace STAGapp
 {
@@ -33,6 +34,10 @@ namespace STAGapp
         public void NavigateToLectureRecordingsPage(rozvrhovaAkce timetableEvent, TimetablePage timetablePage)
         {
             Main.Content = new LectureRecordingsPage(timetableEvent, timetablePage);
+        }
+
+        public void NavigateToUploadPresentationPage(Page previousPage, rozvrhovaAkce timetableEvent) {
+            Main.Content = new UploadPresentationPage(previousPage, timetableEvent);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

@@ -36,5 +36,10 @@ namespace STAGapp
             MainWindow window = (MainWindow)Window.GetWindow(this);
             window.Main.Content = this.previousPage;
         }
+
+        void UploadPresentationButton_OnClick(object sender, RoutedEventArgs e) {
+            MainWindow window = (MainWindow)Window.GetWindow(this);
+            window.NavigateToUploadPresentationPage(this,this.timetableEvent);
+        }
     }
 }

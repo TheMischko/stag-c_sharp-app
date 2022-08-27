@@ -14,6 +14,7 @@ namespace STAGapp.DataClasses
         public string TitulZa { get; set; }
         public string Email { get; set; }
         public string Token { get; set; }
+        public string Username { get; set; }
         public StagUserInfo[] StagUserInfo { get; set; }
 }
 }
