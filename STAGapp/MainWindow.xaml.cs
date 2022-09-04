@@ -8,15 +8,20 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using STAGApp.Forms;
 using STAGapp.Pages;
 using ToastNotifications;
 using ToastNotifications.Lifetime;
 using ToastNotifications.Messages;
 using ToastNotifications.Position;
+using Application = System.Windows.Application;
+
 
 namespace STAGapp
 {
@@ -63,6 +68,21 @@ namespace STAGapp
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Main.Content = new LoginPage();
+            FormRozcestnik formRozcestnik = new FormRozcestnik();
+            ShowForm(formRozcestnik);
+
+        }
+
+        public void ShowForm(Form form) {
+            form.ShowDialog(new WpfWindowWrapper(this));
+        }
+    }
+
+    public class WpfWindowWrapper : System.Windows.Forms.IWin32Window {
+        public IntPtr Handle { get; }
+
+        public WpfWindowWrapper(Window wpfWindow) {
+            Handle = new WindowInteropHelper(wpfWindow).Handle;
         }
     }
 }

@@ -34,6 +34,8 @@
         </Style>
     </Page.Resources>
     <Grid Margin="10">
+        <Button x:Name="ReturnBackButton" Content="Zpět" Width="80" Height="40" FontSize="18" 
+                VerticalAlignment="Top" HorizontalAlignment="Left" Click="ReturnBackButton_OnClick"/>
         <StackPanel Margin="100, 0" HorizontalAlignment="Center">
             <TextBlock x:Name="TitleTextBlock" Text="Nahrát novou přednášku k předmětu ?"
                        TextAlignment="Center" Margin="0, 0, 0, 50" FontWeight="Bold" FontSize="28"/>
@@ -86,7 +88,7 @@
                          Visibility="Hidden" Margin="0,14,0,0"/>
             <TextBlock x:Name="UploadProgressBarText" Text="0%" TextAlignment="Center" FontSize="18" Visibility="Hidden"/>
             <Button x:Name="BackButton" Content="Zpět na detail předmětu" Style="{StaticResource FormControl}" 
-                    Click="UploadButton_OnClick" Margin="0, 32" Visibility="Hidden"/>
+                    Click="ReturnBackButton_OnClick" Margin="0, 32" Visibility="Hidden"/>
         </StackPanel>
     </Grid>
 </Page>

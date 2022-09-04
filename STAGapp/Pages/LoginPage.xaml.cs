@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using STAGApp.Forms;
 using ToastNotifications.Messages;
 
 namespace STAGapp
@@ -73,6 +74,24 @@ namespace STAGapp
         {
             ErrorTextBlock.Visibility = Visibility.Visible;
             ErrorTextBlock.Text = message;
+        }
+
+        void CalendarButton_OnClick(object sender, RoutedEventArgs e) {
+            MainWindow window = (MainWindow)Window.GetWindow(this);
+            FormKalendar formKalendar = new FormKalendar();
+            window.ShowForm(formKalendar);
+        }
+
+        void MeetButton_OnClick(object sender, RoutedEventArgs e) {
+            MainWindow window = (MainWindow)Window.GetWindow(this);
+            FormPrezentovat formPrezentovat = new FormPrezentovat();
+            window.ShowForm(formPrezentovat);
+        }
+
+        void PlayerButton_OnClick(object sender, RoutedEventArgs e) {
+            MainWindow window = (MainWindow)Window.GetWindow(this);
+            FormPlayer formPlayer = new FormPlayer();
+            window.ShowForm(formPlayer);
         }
     }
 }

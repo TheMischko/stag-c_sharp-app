@@ -26,21 +26,21 @@
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50" />
+            <RowDefinition Height="Auto" MinHeight="50" MaxHeight="100" />
             <RowDefinition Height="50" />
             <RowDefinition Height="50" />
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
-        <TextBlock Text="Please enter your Mediasite login information." FontSize="16" Grid.ColumnSpan="2"></TextBlock>
+        <TextBlock TextWrapping="Wrap" Text="Prosím zadejte své přihlašovací údaje ke službě Mediasite." FontSize="16" Grid.ColumnSpan="2"></TextBlock>
         
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Login:"/>
         <TextBox x:Name="MediasiteLoginTextBox" Grid.Row="1" Grid.Column="1"></TextBox>
         
-        <TextBlock Grid.Row="2" Grid.Column="0" Text="Password:"/>
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Heslo:"/>
         <PasswordBox x:Name="MediasitePasswordBox" Grid.Row="2" Grid.Column="1"></PasswordBox>
         
         <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" x:Name="MediasiteLoginButton"
-                Margin="100, 10" Content="Login" FontSize="18"
+                Margin="100, 10" Content="Přihlásit" FontSize="18"
                 Click="MediasiteLoginButton_OnClick"/>
     </Grid>
 </Window>

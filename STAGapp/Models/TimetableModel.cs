@@ -40,7 +40,6 @@ namespace STAGapp.Models
                 System.Console.WriteLine("Error with getting timetable");
                 throw new ArgumentException("Wrong data.");
             }
-            System.Console.WriteLine("Timetable OK");
 
             string xmlContent = await response.Content.ReadAsStringAsync();
 
@@ -78,15 +77,19 @@ namespace STAGapp.Models
             rozvrhovaAkce[,] eventsByDates = new rozvrhovaAkce[5, Globals.timetableStartingHours.Length];
 
             if (timeTable == null) return eventsByDates;
-
-            foreach (rozvrhovaAkce timetableEvent in timeTable.rozvrhovaAkce)
-            {
-                if (timetableEvent.den != null)
-                {
-                    int hourIndex = getStartingHourIndex(timetableEvent.hodinaSkutOd);
-                    int dayIndex = Array.IndexOf(Globals.workdayStrings, timetableEvent.den);
-                    eventsByDates[dayIndex, hourIndex] = timetableEvent;
+            if (timeTable.rozvrhovaAkce == null) return eventsByDates;
+            try {
+                foreach (rozvrhovaAkce timetableEvent in timeTable.rozvrhovaAkce) {
+                    if (timetableEvent.den != null) {
+                        int hourIndex = getStartingHourIndex(timetableEvent.hodinaSkutOd);
+                        int dayIndex = Array.IndexOf(Globals.workdayStrings, timetableEvent.den);
+                        eventsByDates[dayIndex, hourIndex] = timetableEvent;
+                    }
                 }
+            }
+            // Catch error that alarms that data doesnt have any timetable events.
+            catch (NullReferenceException ex) {
+                return eventsByDates;
             }
 
             return eventsByDates;

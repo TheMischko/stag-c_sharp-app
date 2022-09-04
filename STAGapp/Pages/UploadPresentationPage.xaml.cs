@@ -7,8 +7,10 @@ using System.Windows;
 using System.Windows.Controls;
 using FTPClient;
 using Microsoft.Win32;
+using Newtonsoft.Json.Linq;
 using STAGapp.DataClasses;
 using STAGapp.Models;
+using ToastNotifications.Messages;
 
 namespace STAGapp.Pages {
     public partial class UploadPresentationPage : Page {
@@ -21,7 +23,7 @@ namespace STAGapp.Pages {
         }
 
         void UploadPresentationPage_OnLoaded(object sender, RoutedEventArgs e) {
-            TitleTextBlock.Text = String.Format("Nahrát novou přednášku k předmětu {0}", "Test");
+            TitleTextBlock.Text = String.Format("Nahrát novou přednášku k předmětu {0}", timetableEvent.nazev);
         }
 
         void FileSelectDialogButton_OnClick(object sender, RoutedEventArgs e) {
@@ -34,7 +36,14 @@ namespace STAGapp.Pages {
             }
         }
 
-        void UploadButton_OnClick(object sender, RoutedEventArgs e) {
+        async void UploadButton_OnClick(object sender, RoutedEventArgs e) {
+            MainWindow window = (MainWindow)Window.GetWindow(this);
+            // Check access to Mediasite.
+            if (Globals.MediasiteAuth == null) {
+                window.Notifier.ShowWarning("Nejste přihlášen k Mediasite.");
+                return;
+            }
+            // Get values from inputs.
             string file = (string)FileSelectDialogButton.Content;
             string title = PresentationTitleTextBox.Text;
             string description = PresentationDescriptionTextBox.Text;
@@ -42,26 +51,48 @@ namespace STAGapp.Pages {
             if (PresentationDatePicker.SelectedDate != null) {
                 date = (DateTime) PresentationDatePicker.SelectedDate;
             }
+            //TODO: Input validation
 
+            //Get target folder name.
             string folderName = CreateFolderName(this.timetableEvent);
+            // Get new filename.
             string fileName = CreateFileName(this.timetableEvent, date, title);
-
+            // Get extenstion of MIME type of uploaded file.
             string extension = file.Split('.').Last();
-
+            // Combine paths to get full relative path on target storage.
             string newFullFileName = String.Format("{0}.{1}", fileName, extension);
-            
+            string newFullFilePath = Path.Combine(folderName, newFullFileName);
+            // Show progress bar and text.
             UploadProgressBar.Visibility = Visibility.Visible;
             UploadProgressBarText.Visibility = Visibility.Visible;
-            
-            if ((bool) FtpRadioButton.IsChecked) {
-                //Use FTP
-                FTPModel.ChunkUploaded += OnChunkUploadedHandler;
-                FTPModel.UploadCompleted += OnFileUploadedHandler;
-                FTPModel.CreateFolder(folderName);
-                FTPModel.UploadFile(file, Path.Combine(folderName, newFullFileName));
+
+            try {
+                // Create new record for new presentation in Mediashare database.
+                JObject presentation =
+                    await MediaSiteModel.CreatePresentation(Globals.MediasiteAuth, title, description);
+                // Get newly created record's ID.
+                string presentationId = (presentation["id"] as JValue).Value.ToString();
+                // Upload file via chosen method.
+                if ((bool) FtpRadioButton.IsChecked) {
+                    //Use FTP
+                    FTPModel.ChunkUploaded += OnChunkUploadedHandler;
+                    FTPModel.UploadCompleted += OnFileUploadedHandler;
+                    FTPModel.CreateFolder(folderName);
+                    FTPModel.UploadFile(file, newFullFilePath);
+                }
+                else {
+                    //Use HTTP
+                    MediaSiteModel.ChunkUploaded += OnChunkUploadedHandler;
+                    MediaSiteModel.UploadCompleted += OnFileUploadedHandler;
+                    MediaSiteModel.UploadFile(Globals.MediasiteAuth, presentation, presentationId, file,
+                        newFullFilePath);
+                }
+                // Link file to presentation record at Mediashare database.
+                MediaSiteModel.AttachFileToPresentation(Globals.MediasiteAuth, presentationId, newFullFilePath);
             }
-            else {
-                //Use HTTP
+            catch (Exception ex) {
+                window.Notifier.ShowError("Chyba během nahrávání souboru.");
+                window.Notifier.ShowError(ex.Message);
             }
         }
 
@@ -79,6 +110,13 @@ namespace STAGapp.Pages {
             });
         }
 
+        /// <summary>
+        /// Creates folder name by special pattern.<br/>
+        /// Example of folder name: <br/>
+        /// KEK_MA1 - Makroekonomie I - ales_kocourek 2021_2022
+        /// </summary>
+        /// <param name="timetableEvent">Event or subject that corresponds to created folder.</param>
+        /// <returns>Folder name</returns>
         static string CreateFolderName(rozvrhovaAkce timetableEvent) {
             StringBuilder sb = new StringBuilder();
             sb.Append(timetableEvent.katedra + "_" + timetableEvent.predmet);
@@ -92,6 +130,15 @@ namespace STAGapp.Pages {
 
             return sb.ToString();
         }
+        /// <summary>
+        /// Creates folder name by special pattern.<br/>
+        /// Example of folder name: <br/>
+        /// KEK_MA1 02_21 – Makroekonomie a ČR - ales_kocourek 2021_2022
+        /// </summary>
+        /// <param name="timetableEvent">Event or subject that corresponds to created presentation.</param>
+        /// <param name="date">Record date of the presentation.</param>
+        /// <param name="title">Title of the presentation. If none is given subject title is used instead.</param>
+        /// <returns></returns>
         static string CreateFileName(rozvrhovaAkce timetableEvent, DateTime date, string title) {
             StringBuilder sb = new StringBuilder();
             sb.Append(timetableEvent.katedra + "_" + timetableEvent.predmet);
@@ -128,6 +175,11 @@ namespace STAGapp.Pages {
             }
 
             return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
+        }
+
+        void ReturnBackButton_OnClick(object sender, RoutedEventArgs e) {
+            MainWindow window = (MainWindow)Window.GetWindow(this);
+            window.Main.Content = this.previousPage;
         }
     }
 }
