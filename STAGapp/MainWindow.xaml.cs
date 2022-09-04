@@ -68,8 +68,6 @@ namespace STAGapp
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Main.Content = new LoginPage();
-            FormRozcestnik formRozcestnik = new FormRozcestnik();
-            ShowForm(formRozcestnik);
 
         }
 

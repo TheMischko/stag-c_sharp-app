@@ -24,6 +24,8 @@ namespace STAGapp.Pages {
 
         void UploadPresentationPage_OnLoaded(object sender, RoutedEventArgs e) {
             TitleTextBlock.Text = String.Format("Nahrát novou přednášku k předmětu {0}", timetableEvent.nazev);
+            FtpRadioButton.IsEnabled = Globals.useMediasite;
+            HttpRadioButton.Visibility = Globals.useMediasite ? Visibility.Hidden : Visibility.Visible;
         }
 
         void FileSelectDialogButton_OnClick(object sender, RoutedEventArgs e) {

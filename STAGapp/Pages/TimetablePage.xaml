@@ -75,12 +75,13 @@
                 <ComboBox Grid.Column="1" FontSize="18" SelectionChanged="YearComboBox_ValueChanged" DropDownClosed="YearComboBox_ValueChanged">
                     <ComboBoxItem Tag="2019">2019/2020</ComboBoxItem>
                     <ComboBoxItem Tag="2020">2020/2021</ComboBoxItem>
-                    <ComboBoxItem Tag="2021" IsSelected="True">2021/2022</ComboBoxItem>
+                    <ComboBoxItem Tag="2021">2021/2022</ComboBoxItem>
+                    <ComboBoxItem Tag="2022" IsSelected="True">2022/2023</ComboBoxItem>
                 </ComboBox>
                 <TextBlock Text="Semestr:" Grid.Column="2" FontSize="18" TextAlignment="Right" Margin="0,0,18,0"/>
                 <ComboBox Grid.Column="3" FontSize="18" SelectionChanged="SemestrComboBox_ValueChanged" DropDownClosed="SemestrComboBox_ValueChanged">
-                    <ComboBoxItem Tag="zs">Zimní</ComboBoxItem>
-                    <ComboBoxItem Tag="ls" IsSelected="True">Letní</ComboBoxItem>
+                    <ComboBoxItem x:Name="ZsComboBox" Tag="zs">Zimní</ComboBoxItem>
+                    <ComboBoxItem x:Name="LsComboBox" Tag="ls">Letní</ComboBoxItem>
                 </ComboBox>
             </Grid>
 

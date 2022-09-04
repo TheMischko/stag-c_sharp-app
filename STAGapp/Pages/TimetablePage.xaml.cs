@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ToastNotifications.Messages;
 
 namespace STAGapp
 {
@@ -41,9 +42,24 @@ namespace STAGapp
             DateTime now = DateTime.Now;
             selectedYear = now.Month >= 9 ? now.Year.ToString() : (now.Year - 1).ToString();
             selectedSemestr = now.Month >= 9 ? "zs" : "ls";
+            if (now.Month >= 9) {
+                selectedYear = now.Year.ToString();
+                selectedSemestr = "zs";
+                ZsComboBox.IsSelected = true;
+                LsComboBox.IsSelected = false;
+            }
+            else {
+                selectedYear = (now.Year-1).ToString();
+                selectedSemestr = "ls";
+                ZsComboBox.IsSelected = false;
+                LsComboBox.IsSelected = true;
+            }
+            
+            
 
             //TODO: If student then hide
-            if (false) {
+            bool isStudent = false;
+            if (!Globals.useMediasite || isStudent) {
                 MediasiteStatusGrid.Visibility = Visibility.Hidden;
             }
             
@@ -55,29 +71,49 @@ namespace STAGapp
             string authToken = UserModel.GetAuthToken();
             bool isTeacher = UserModel.IsUserInRole(Roles.Teacher);
             string userID = UserModel.GetIDByRole(isTeacher ? Roles.Teacher : Roles.Student);
+            try {
+                rozvrh timetable = await TimetableModel.GetTimetable(authToken, userID, selectedYear, selectedSemestr,
+                    isTeacher ? Roles.Teacher : Roles.Student);
+                if (timetable == null) return;
 
-            rozvrh timetable = await TimetableModel.GetTimetable(authToken, userID, selectedYear, selectedSemestr, isTeacher ? Roles.Teacher : Roles.Student);
-            rozvrhovaAkce[,] eventsForCurrentWeek = TimetableModel.getStableTimetable(timetable);
+                rozvrhovaAkce[,] eventsForCurrentWeek = TimetableModel.getStableTimetable(timetable);
 
-            foreach(TimeTableCell cell in cells)
-            {
-                TimetableGrid.Children.Remove(cell);
-            }
-
-            for (int i = 0; i < Globals.workdayStrings.Length; i++)
-            {
-                for (int j = 0; j < Globals.timetableStartingHours.Length; j++)
-                {
-                    if (eventsForCurrentWeek[i, j] == null) continue;
-
-                    TimeTableCell timeTableCell = new TimeTableCell();
-                    int colSpan = timeTableCell.InitByEvent(eventsForCurrentWeek[i, j], j + 2, i + 2);
-                    timeTableCell.TimetableEvent = eventsForCurrentWeek[i, j];
-                    timeTableCell.MouseClickHandlerFunc = EventCellClickHandler;
-                    j += colSpan - 1;
-                    cells.Add(timeTableCell);
-                    TimetableGrid.Children.Add(timeTableCell);
+                foreach (TimeTableCell cell in cells) {
+                    TimetableGrid.Children.Remove(cell);
                 }
+
+                for (int i = 0; i < Globals.workdayStrings.Length; i++) {
+                    for (int j = 0; j < Globals.timetableStartingHours.Length; j++) {
+                        if (eventsForCurrentWeek[i, j] == null) continue;
+
+                        TimeTableCell timeTableCell = new TimeTableCell();
+                        int colSpan = timeTableCell.InitByEvent(eventsForCurrentWeek[i, j], j + 2, i + 2);
+                        timeTableCell.TimetableEvent = eventsForCurrentWeek[i, j];
+                        timeTableCell.MouseClickHandlerFunc = EventCellClickHandler;
+                        j += colSpan - 1;
+                        cells.Add(timeTableCell);
+                        TimetableGrid.Children.Add(timeTableCell);
+                    }
+                }
+            }
+            catch (EmptyTimetableException ex) {
+                MainWindow window = (MainWindow)Window.GetWindow(this);
+                if (window == null) {
+                    System.Console.WriteLine("Na dané období uživatel nemá rozvrh.");
+                }
+                else {
+                    window.Notifier.ShowWarning("Na dané období uživatel nemá rozvrh.");
+                }
+            }
+            catch (NullReferenceException ex) {
+                MainWindow window = (MainWindow)Window.GetWindow(this);
+                if (window == null) {
+                    System.Console.WriteLine("Chyba při stahování rozvrhu.");
+                }
+                else {
+                    window.Notifier.ShowError("Chyba při stahování rozvrhu.");
+                }
+                
             }
         }
 

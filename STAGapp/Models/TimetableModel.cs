@@ -10,16 +10,44 @@ using System.Xml.Serialization;
 
 namespace STAGapp.Models
 {
-    public static class TimetableModel
-    {
-        public static async Task<rozvrh> GetTimetable(string userToken, string personalNum, string year, string semestr, Roles role = Roles.Student)
+    public static class TimetableModel {
+        static DateTime cachedTime = new DateTime();
+        static rozvrh cachedRozvrh;
+        static string cachedYear;
+        static string cachedSemester;
+        public static async Task<rozvrh> GetTimetable(string userToken, string personalNum, string yearInput, string semestrInput, Roles role = Roles.Student)
         {
+            DateTime now = DateTime.Now;
+
+            string semestr = semestrInput;
+            if (String.IsNullOrEmpty(semestrInput)) {
+                if (now.Month >= 9) semestr = "zs";
+                else semestr = "ls";
+            }
+
+            string year = yearInput;
+            if (String.IsNullOrEmpty(yearInput)) {
+                if (semestr == "zs") year = now.Year.ToString();
+                else year = (now.Year-1).ToString();
+            }
+
+            if (cachedYear == yearInput && cachedSemester == semestrInput) {
+                double difference = Math.Abs((now - cachedTime).TotalMilliseconds);
+                if (difference < 10000) {
+                    return cachedRozvrh;
+                }
+            }
+
+            cachedTime = now;
+            cachedYear = year;
+            cachedSemester = semestr;
+            
             HttpClient http = Globals.httpClient;
             http.DefaultRequestHeaders.Clear();
             byte[] tokenEncodedBytes = System.Text.Encoding.UTF8.GetBytes(String.Format("{0}:", userToken));
             string tokenEncoded = System.Convert.ToBase64String(tokenEncodedBytes);
             http.DefaultRequestHeaders.Add("Authorization", String.Format("Basic {0}", tokenEncoded));
-
+            
             HttpResponseMessage response;
 
             // Get teachers timetable
@@ -44,21 +72,20 @@ namespace STAGapp.Models
             string xmlContent = await response.Content.ReadAsStringAsync();
 
             System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(rozvrh));
-            /*rozvrh actions;
-            using (Stream reader = new FileStream("testData.xml", FileMode.Open))
-            {
-                actions = (rozvrh)serializer.Deserialize(reader);
-            }*/
             try
             {
                 rozvrh actions = (rozvrh)serializer.Deserialize(GenerateStreamFromString(xmlContent));
+                if (actions.rozvrhovaAkce == null) {
+                    throw new EmptyTimetableException();
+                }
+                cachedRozvrh = actions;
                 return actions;
-            } catch( Exception ex)
+            } catch( InvalidOperationException ex)
             {
                 System.Console.WriteLine(ex.Message);
+                cachedRozvrh = default;
                 return default;
             }
-            
         }
 
         private static Stream GenerateStreamFromString(string s)
@@ -77,21 +104,15 @@ namespace STAGapp.Models
             rozvrhovaAkce[,] eventsByDates = new rozvrhovaAkce[5, Globals.timetableStartingHours.Length];
 
             if (timeTable == null) return eventsByDates;
-            if (timeTable.rozvrhovaAkce == null) return eventsByDates;
-            try {
-                foreach (rozvrhovaAkce timetableEvent in timeTable.rozvrhovaAkce) {
-                    if (timetableEvent.den != null) {
-                        int hourIndex = getStartingHourIndex(timetableEvent.hodinaSkutOd);
-                        int dayIndex = Array.IndexOf(Globals.workdayStrings, timetableEvent.den);
-                        eventsByDates[dayIndex, hourIndex] = timetableEvent;
-                    }
+            if (timeTable.rozvrhovaAkce == null) throw new NullReferenceException();
+            foreach (rozvrhovaAkce timetableEvent in timeTable.rozvrhovaAkce) {
+                if (timetableEvent.den != null) {
+                    int hourIndex = getStartingHourIndex(timetableEvent.hodinaSkutOd);
+                    int dayIndex = Array.IndexOf(Globals.workdayStrings, timetableEvent.den);
+                    eventsByDates[dayIndex, hourIndex] = timetableEvent;
                 }
             }
-            // Catch error that alarms that data doesnt have any timetable events.
-            catch (NullReferenceException ex) {
-                return eventsByDates;
-            }
-
+            
             return eventsByDates;
         }
 
@@ -150,4 +171,6 @@ namespace STAGapp.Models
             return endingindex - startingIndex + 1;
         }
     }
+    
+    public class EmptyTimetableException : Exception{}
 }
